@@ -1,4 +1,4 @@
-#pragma once
+pragma once
 
 // Do³¹czenie nag³ówka SDKDDKVer.h definiuje najwy¿sz¹ dostêpn¹ platformê systemu Windows.
 

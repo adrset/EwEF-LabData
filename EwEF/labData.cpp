@@ -3,13 +3,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctime>
-#include <Windows.h>
 #include "Misc.h"
 #include "labData.h"
 
 std::string labData::directory = "";
 
-labData::labData(int width, int height, std::string dir) : m_screenWidth(width), m_screenHeight(height)
+labData::labData(int width, int height, std::string dir)
 {
 	struct stat info;
 
@@ -43,20 +42,6 @@ labData::~labData()
 {
 }
 
-void labData::initPlotter() {
-	PlotterEngine::init();
-	m_window.createWindow("EwEF LabData Plotter", m_screenWidth, m_screenHeight,PlotterEngine::windowFlags::NONE);
-	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
-	
-
-	//INITIALIZE fonts after SDL!
-	//m_spriteFont = new PlotterEngine::SpriteFont("fonts/04B_19__.ttf", 32);
-	m_camera.init(m_screenWidth, m_screenHeight);
-	m_hudCamera.init(m_screenWidth, m_screenHeight);
-	m_hudCamera.setPosition(glm::vec2(m_screenWidth / 2.0f, m_screenHeight / 2.0f));
-
-}
-
 void labData::menu()
 {
 	std::vector<std::string> temp;
@@ -73,7 +58,6 @@ void labData::menu()
 		std::cout << " 4) wczytac plik ELVIS dla czasu" << std::endl;
 		std::cout << " 5) wczytac plik ELVIS dla czestotliwosci" << std::endl;
 		std::cout << " 6) Zapisac wszystkei pliki" << std::endl;
-		std::cout << " 7) Otworzyc Plottera" << std::endl;
 		std::cout << " 8) wyjsc" << std::endl;
 		std::string tmp;
 		std::getline(std::cin, tmp);
@@ -203,35 +187,6 @@ void labData::menu()
 			}
 
 			std::cout << "Zapisano. " << std::endl;
-			break;
-		case '7':
-
-			initPlotter();
-			while (true) {
-				m_camera.update();
-				glClearDepth(1.0);
-				// Clear the color and depth buffer
-				SDL_Event evnt;
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				while (SDL_PollEvent(&evnt)) {
-					switch (evnt.type) {
-					case SDL_QUIT:
-						exit(1);
-						break;	
-					}
-
-				}
-				m_inputManager.update();
-				//Swap our buffer and draw everything to the screen!
-				m_window.swapBuffer();
-			}
-			
-			/*temp.push_back("set term png");
-			temp.push_back("set output \"plik.png\"");
-			temp.push_back("plot \"" + m_elvisT[0].getFileNameString() + "\" using 1:2 with lines");
-			temp.push_back("exit");
-			m_plot.plot(temp);*/
-
 			break;
 		default:
 			go = false;
